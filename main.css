@@ -93,6 +93,7 @@ body {
 {
   text-align:center;
   margin:auto;
+  grid-column: 1 / 4;
 }
 .podpis
 {
