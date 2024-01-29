@@ -201,7 +201,7 @@ body {
 .gs_image_logo
 {
   border-radius: 1em;
-  max-width:40%;
+  max-width:30%;
   display:block;
 }
 .ended
@@ -329,7 +329,7 @@ body {
   color: red;
   font-weight: 800;
   float: left;
-  margin-left: 2em;
+/*   margin-left: 2em; */
 }
 
 .card-bottom-icons {
@@ -362,6 +362,8 @@ body {
   align-items: center;
   font-size: 1em;
   text-align:center;
+  width:100%;
+  text-align:center;
 }
 
 
@@ -372,6 +374,7 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 1em;
+  margin: auto;
 }
 
 .podpis
