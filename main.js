@@ -8,7 +8,7 @@ function showallinfo()
 {
     for ( p=0; p < testi3.length; p++)
     {
-        testi3[ p ].style.display = "flex";
+        testi3[ p ].style.display = "grid";
     }
     
     filter = document.getElementById('allsort');
