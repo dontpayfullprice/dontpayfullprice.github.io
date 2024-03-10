@@ -118,6 +118,7 @@ body {
 .gs_logo {
 /*   height: 194px; */
   border-radius: 3px;
+  margin:1rem;
 /*  position: absolute;*/
 }
 
@@ -133,6 +134,7 @@ body {
 
 .gs_website , .gs_code , .gs_link {
   color: red;
+  margin:1rem;
   font-weight: 800;
   float: left;
 /*   margin-left: 2em; */
