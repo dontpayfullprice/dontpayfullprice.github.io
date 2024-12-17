@@ -1,0 +1,1064 @@
+<script>
+
+function showcountrieslist ()
+{
+    d = document.getElementById('changecountry');
+    if ( d.style.display == 'none' )
+        d.style.display = 'block';
+    else
+        d.style.display = 'none';
+}
+
+function copypromo (a , b)
+{
+    promocoda = a.target.previousElementSibling.outerText ;
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(promocoda);
+    a.target.innerHTML = 'Copied';
+}
+
+async function word_coupons(e , id)
+{
+        searchwordq = document.getElementById("searchwordq").value;
+            document.title = 'Showing active coupons with words "' + searchwordq + '" - PayWithCode';
+
+        countrycode = document.getElementById('mycountry_selected_id').innerHTML;
+        //console.log ( 'cat=' + category );
+document.getElementById('couponlist').innerHTML = '';
+        jQuery('div#'+ 'couponlist').append('<br>'+ await(await fetch('coupon-search.php/?show_coupons=' + id + '&searchq=' + encodeURIComponent(searchwordq) + '&country=' + countrycode)).text());
+
+
+        testi = document.querySelectorAll('.voucher_categories');
+        testi2 = document.querySelectorAll('.company_name');
+        testi3 = document.querySelectorAll('.card');
+
+            companies = document.getElementsByClassName ("company_name");
+            allcompanies = [];
+            for ( i = 0 ; i < companies.length ; i++ )
+            {
+                if ( allcompanies.includes (companies[i].innerText ) == false )
+                    allcompanies.push (companies[i].innerText);
+            }
+
+            types = document.getElementsByClassName ("tipkupona");
+            alltypes = [];
+            for ( i = 0 ; i < types.length ; i++ )
+            {
+                if ( alltypes.includes (types[i].innerText ) == false )
+			for ( po = 0 ; po < types[i].innerText.split(', ').length ; po++ )
+				if ( !alltypes.includes( types[i].innerText.split(', ')[po]) )
+        	            		alltypes.push (types[i].innerText.split(', ')[po].trim());
+            }
+
+
+            categories = document.getElementsByClassName ("voucher_categories");
+            allcategories = [];
+            for ( i = 0 ; i < categories.length ; i++ )
+            {
+                if ( allcategories.includes (categories[i].innerText ) == false )
+			for ( po = 0 ; po < categories[i].innerText.split(', ').length ; po++ )
+				if ( !allcategories.includes( categories[i].innerText.split(', ')[po]) )
+					allcategories.push (categories[i].innerText.split(', ')[po].trim());
+            }
+
+            allcategories.sort();
+            alltypes.sort();
+            allcompanies.sort();
+
+	categoryselect = '<div><span>Sort by category</span>		    <select  name="categories" method="post" class="sorting sort_by_category" onchange="filtering( this , this.className )">				<option value="pusto" class="filter_action">All categories</option><option value="pusto" class="filter_action">' + allcategories.join ('<option class="filter_action">') + '</option>' +
+            '</select></div><div id="buttondiv"><button id="buttonshowall" onclick="showallinfo()">Reset filters</button></div>';
+
+
+	companyselect =	'<div><span>Sort by company</span>        <select name="categories" method="post" class="sorting sort_by_company" onchange="filtering( this , this.className)"><option value="pusto" class="filter_action">All companies</option><option value="pusto" class="filter_action">' + allcompanies.join ('<option value="pusto" class="filter_action">') + '        </option>        </select>	</div>';
+
+	typeselect =	'<div><span>Sort by type</span>		    <select name="categories" method="post" class="sorting sort_by_type" onchange="filtering( this , this.className )"><option value="pusto" class="filter_action">All types</option><option value="pusto" class="filter_action">'  + alltypes.join ('<option class="filter_action">') +		    '</option></select>	</div>';
+
+    filter = document.getElementById('filters');
+    filter.innerHTML = typeselect + companyselect + categoryselect ;
+        //filter = document.getElementById('allsort');
+        //filter.innerHTML = 'Showing: ' + document.getElementsByClassName ("gs_kupon").length;
+
+    document.querySelector("link[rel='canonical']").href = window.location.href + '?search='   + encodeURIComponent(searchwordq)     ;
+  }
+
+async function changecountry()
+{
+    window.location.href = window.location.origin + '?country=' + document.getElementById('changecountry').selectedOptions[0].value ;
+}
+
+async function show_coupons(e , id) {
+
+    selected =     document.getElementById('categories').selectedOptions[0].value;
+    document.title = 'Showing active coupons in category "' + selected + '" - PayWithCode';
+
+    countrycodes = { "Abkhazia" : "AB", "Australia" : "AU", "Austria" : "AT", "Azerbaijan" : "AZ", "Albania" : "AL", "Algeria" : "DZ", "American Samoa" : "AS", "Anguilla" : "AI", "Angola" : "AO", "Andorra" : "AD", "Antarctica" : "AQ", "Antigua and Barbuda" : "AG", "Argentina" : "AR", "Armenia" : "AM", "Aruba" : "AW", "Afghanistan" : "AF", "Bahamas" : "BS", "Bangladesh" : "BD", "Barbados" : "BB", "Bahrain" : "BH", "Belarus" : "BY", "Belize" : "BZ", "Belgium" : "BE", "Benin" : "BJ", "Bermuda" : "BM", "Bulgaria" : "BG", "Bolivia" : "BO", "Bonaire" : "BQ", "Bosnia and Herzegovina" : "BA", "Botswana" : "BW", "Brazil" : "BR", "British Indian Ocean Territory" : "IO", "Brunei Darussalam" : "BN", "Burkina Faso" : "BF", "Burundi" : "BI", "Bhutan" : "BT", "Vanuatu" : "VU", "Hungary" : "HU", "Venezuela" : "VE", "Virgin Islands" : "VG", "Virgin Islands" : "VI", "Vietnam" : "VN", "Gabon" : "GA", "Haiti" : "HT", "Guyana" : "GY", "Gambia" : "GM", "Ghana" : "GH", "Guadeloupe" : "GP", "Guatemala" : "GT", "Guinea" : "GN", "Guinea-Bissau" : "GW", "Germany" : "DE", "Guernsey" : "GG", "Gibraltar" : "GI", "Honduras" : "HN", "Hong Kong" : "HK", "Grenada" : "GD", "Greenland" : "GL", "Greece" : "GR", "Georgia" : "GE", "Guam" : "GU", "Denmark" : "DK", "Jersey" : "JE", "Djibouti" : "DJ", "Dominica" : "DM", "Dominican Republic" : "DO", "Egypt" : "EG", "Zambia" : "ZM", "Western Sahara" : "EH", "Zimbabwe" : "ZW", "Israel" : "IL", "India" : "IN", "Indonesia" : "ID", "Jordan" : "JO", "Iraq" : "IQ", "Iran" : "IR", "Ireland" : "IE", "Iceland" : "IS", "Spain" : "ES", "Italy" : "IT", "Yemen" : "YE", "Cape Verde" : "CV", "Kazakhstan" : "KZ", "Cambodia" : "KH", "Cameroon" : "CM", "Canada" : "CA", "Qatar" : "QA", "Kenya" : "KE", "Cyprus" : "CY", "Kyrgyzstan" : "KG", "Kiribati" : "KI", "China" : "CN", "Cocos (Keeling) Islands" : "CC", "Colombia" : "CO", "Comoros" : "KM", "Congo" : "CG", "Congo" : "CD", "Korea" : "KP", "Korea" : "KR", "Costa Rica" : "CR", "Cote d'Ivoire" : "CI", "Cuba" : "CU", "Kuwait" : "KW", "Curaçao" : "CW", "Lao People's Democratic Republic" : "LA", "Latvia" : "LV", "Lesotho" : "LS", "Lebanon" : "LB", "Libyan Arab Jamahiriya" : "LY", "Liberia" : "LR", "Liechtenstein" : "LI", "Lithuania" : "LT", "Luxembourg" : "LU", "Mauritius" : "MU", "Mauritania" : "MR", "Madagascar" : "MG", "Mayotte" : "YT", "Macao" : "MO", "Malawi" : "MW", "Malaysia" : "MY", "Mali" : "ML", "United States Minor Outlying Islands" : "UM", "Maldives" : "MV", "Malta" : "MT", "Morocco" : "MA", "Martinique" : "MQ", "Marshall Islands" : "MH", "Mexico" : "MX", "Micronesia" : "FM", "Mozambique" : "MZ", "Moldova" : "MD", "Monaco" : "MC", "Mongolia" : "MN", "Montserrat" : "MS", "Burma" : "MM", "Namibia" : "NA", "Nauru" : "NR", "Nepal" : "NP", "Niger" : "NE", "Nigeria" : "NG", "Netherlands" : "NL", "Nicaragua" : "NI", "Niue" : "NU", "New Zealand" : "NZ", "New Caledonia" : "NC", "Norway" : "NO", "United Arab Emirates" : "AE", "Oman" : "OM", "Bouvet Island" : "BV", "Isle of Man" : "IM", "Norfolk Island" : "NF", "Christmas Island" : "CX", "Heard Island and McDonald Islands" : "HM", "Cayman Islands" : "KY", "Cook Islands" : "CK", "Turks and Caicos Islands" : "TC", "Pakistan" : "PK", "Palau" : "PW", "Palestinian Territory" : "PS", "Panama" : "PA", "Holy See (Vatican City State)" : "VA", "Papua New Guinea" : "PG", "Paraguay" : "PY", "Peru" : "PE", "Pitcairn" : "PN", "Poland" : "PL", "Portugal" : "PT", "Puerto Rico" : "PR", "Macedonia" : "MK", "Reunion" : "RE", "Russian Federation" : "RU", "Rwanda" : "RW", "Romania" : "RO", "Samoa" : "WS", "San Marino" : "SM", "Sao Tome and Principe" : "ST", "Saudi Arabia" : "SA", "Saint Helena" : "SH", "Northern Mariana Islands" : "MP", "Saint Barthélemy" : "BL", "Saint Martin (French Part)" : "MF", "Senegal" : "SN", "Saint Vincent and the Grenadines" : "VC", "Saint Kitts and Nevis" : "KN", "Saint Lucia" : "LC", "Saint Pierre and Miquelon" : "PM", "Serbia" : "RS", "Seychelles" : "SC", "Singapore" : "SG", "Sint Maarten" : "SX", "Syrian Arab Republic" : "SY", "Slovakia" : "SK", "Slovenia" : "SI", "United Kingdom" : "GB", "United States" : "US", "Solomon Islands" : "SB", "Somalia" : "SO", "Sudan" : "SD", "Suriname" : "SR", "Sierra Leone" : "SL", "Tajikistan" : "TJ", "Thailand" : "TH", "Taiwan" : "TW", "Tanzania" : "TZ", "Timor-Leste" : "TL", "Togo" : "TG", "Tokelau" : "TK", "Tonga" : "TO", "Trinidad and Tobago" : "TT", "Tuvalu" : "TV", "Tunisia" : "TN", "Turkmenistan" : "TM", "Turkey" : "TR", "Uganda" : "UG", "Uzbekistan" : "UZ", "Ukraine" : "UA", "Wallis and Futuna" : "WF", "Uruguay" : "UY", "Faroe Islands" : "FO", "Fiji" : "FJ", "Philippines" : "PH", "Finland" : "FI", "Falkland Islands (Malvinas)" : "FK", "France" : "FR", "French Guiana" : "GF", "French Polynesia" : "PF", "French Southern Territories" : "TF", "Croatia" : "HR", "Central African Republic" : "CF", "Chad" : "TD", "Montenegro" : "ME", "Czech Republic" : "CZ", "Chile" : "CL", "Switzerland" : "CH", "Sweden" : "SE", "Svalbard and Jan Mayen" : "SJ", "Sri Lanka" : "LK", "Ecuador" : "EC", "Equatorial Guinea" : "GQ", "Åland Islands" : "AX", "El Salvador" : "SV", "Eritrea" : "ER", "Eswatini" : "SZ", "Estonia" : "EE", "Ethiopia" : "ET", "South Africa" : "ZA", "South Georgia and the South Sandwich Islands" : "GS", "South Ossetia" : "OS", "South Sudan" : "SS", "Jamaica" : "JM", "Japan" : "JP" };
+
+
+        category = document.getElementById('categories').selectedOptions[0].className ;
+
+        if ( e.type != 'change' ) category = mucat;
+
+        countrycode = document.getElementById('mycountry_selected_id').innerHTML;
+
+        document.getElementById('couponlist').innerHTML = '';
+        jQuery('div#'+ 'couponlist').append('<br>'+ await(await fetch('coupon-banners.php/?show_coupons=' + id + '&cat=' + encodeURIComponent(category) + '&country=' + countrycode)).text());
+
+        testi = document.querySelectorAll('.voucher_categories');
+        testi2 = document.querySelectorAll('.company_name');
+        testi3 = document.querySelectorAll('.card');
+
+            companies = document.getElementsByClassName ("company_name");
+            allcompanies = [];
+            for ( i = 0 ; i < companies.length ; i++ )
+            {
+                if ( allcompanies.includes (companies[i].innerText ) == false )
+                    allcompanies.push (companies[i].innerText);
+            }
+
+            types = document.getElementsByClassName ("tipkupona");
+            alltypes = [];
+            for ( i = 0 ; i < types.length ; i++ )
+            {
+                if ( alltypes.includes (types[i].innerText ) == false )
+			for ( po = 0 ; po < types[i].innerText.split(', ').length ; po++ )
+				if ( !alltypes.includes( types[i].innerText.split(', ')[po].trim()) )
+        	            		alltypes.push (types[i].innerText.split(', ')[po].trim());
+            }
+
+
+            categories = document.getElementsByClassName ("voucher_categories");
+            allcategories = [];
+            for ( i = 0 ; i < categories.length ; i++ )
+            {
+                if ( allcategories.includes (categories[i].innerText ) == false )
+			for ( po = 0 ; po < categories[i].innerText.split(', ').length ; po++ )
+				if ( !allcategories.includes( categories[i].innerText.split(', ')[po].trim()) )
+					allcategories.push (categories[i].innerText.split(', ')[po].trim());
+            }
+
+            allcategories.sort();
+            alltypes.sort();
+            allcompanies.sort();
+
+
+
+	categoryselect = '<div><span>Sort by category</span>		    <select  name="categories" method="post" class="sorting sort_by_category" onchange="filtering( this , this.className )">				<option value="pusto" class="filter_action">All categories</option><option value="pusto" class="filter_action">' + allcategories.join ('<option class="filter_action">') + '</option>' +
+            '</select></div><div id="buttondiv"><button id="buttonshowall" onclick="showallinfo()">Reset filters</button></div>';
+
+
+	companyselect =	'<div><span>Sort by company</span>        <select name="categories" method="post" class="sorting sort_by_company" onchange="filtering( this , this.className)"><option value="pusto" class="filter_action">All companies</option><option value="pusto" class="filter_action">' + allcompanies.join ('<option value="pusto" class="filter_action">') + '        </option>        </select>	</div>';
+
+	typeselect =	'<div><span>Sort by type</span>		    <select name="categories" method="post" class="sorting sort_by_type" onchange="filtering( this , this.className )"><option value="pusto" class="filter_action">All types</option><option value="pusto" class="filter_action">'  + alltypes.join ('<option class="filter_action">') +		    '</option></select>	</div>';
+
+    filter = document.getElementById('filters');
+    filter.innerHTML = typeselect + companyselect + categoryselect ;
+
+    document.querySelector("link[rel='canonical']").href = window.location.href + '?type='   + selected   ;
+  }
+  async function showbanners(e) {
+    e.preventDefault();
+        document.body.innerHTML+= '<br>'+ await(await fetch('?showbanners=1')).text();
+  }
+  </script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="https://kit.fontawesome.com/747d7c8755.js" crossorigin="anonymous"></script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M37HPPBT');</script>
+<!-- End Google Tag Manager -->
+	<meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://paywithcode.com"/>
+    <meta name="description" content="paywithcode">
+    <meta name="keywords" content="paywithcode">
+<meta name="verify-admitad" content="e5b7208530" />
+<meta name="viewport" content=""width=device-width, initial-scale=1.0""/>
+
+<meta name="p:domain_verify" content="a0e190441a4e2f52fbd9a2b904810bb8"/>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+    <link rel="icon" type="image/png" src="/favicon.png" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/swiper.css">
+    <link rel="stylesheet" href="/css/coupon.css">
+    <link rel="stylesheet" href="/css/marquee.css">
+    <link rel="stylesheet" href="/css/cards.css">
+    <link rel="stylesheet" href="/css/topmenu.css">
+    <link rel="stylesheet" href="/css/categories.css">
+    <link rel="stylesheet" href="/css/category_slider.css">
+    <link rel="stylesheet" href="/css/logo.css">
+    <link rel="stylesheet" href="/css/coupon_a.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Noto+Sans&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Noto+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Adamina|Cookie|Passion+One|Sedgwick+Ave" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin/>
+    <meta name="yandex-verification" content="b094983978ab35f1" />
+    <meta name='ir-site-verification-token' value='24624021'>
+    <meta name="google-site-verification" content="a0b-J1xrsXvr2FZLU8hBoBGL66v0UXPaPGFW9wyNvbo" />
+    <meta name="fo-verify" content="f3306d98-c53e-4739-acee-1efe7132a42e">
+<!-- jquery from google and mobile jquery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!--<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<!-- end of jquery from google and mobile jquery -->
+<script type='text/javascript' src='/js/tlprt.js'></script>
+<script type='text/javascript' src='/js/myreplace.js'></script>
+<script type='text/javascript' src='/js/bgscript.js'></script>
+<script type='text/javascript' src='/js/referrer.js'></script>
+<script type='text/javascript' src='/js/jquery.min.js' id='jquery-core-js'></script>
+
+
+<script>
+
+function copypromo (a , b)
+{
+    promocoda = a.target.previousElementSibling.outerText ;
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(promocoda);
+    a.target.innerHTML = 'Copied';
+}
+
+function showallinfo()
+{
+    for ( p=0; p < testi3.length; p++)
+    {
+        testi3[ p ].style.display = "flex";
+    }
+
+    document.getElementsByClassName( 'sort_by_company' )[0].selectedIndex = 0 ;
+    document.getElementsByClassName( 'sort_by_type' )[0].selectedIndex = 0;
+    document.getElementsByClassName( 'sort_by_category' )[0].selectedIndex = 0 ;
+
+
+
+
+}
+async function filtering ( e , a )
+{
+
+    var yu = 0;
+    testi3.forEach( card =>
+        {
+            card.style.display = "flex";
+            yu++;
+        }
+    );
+
+
+    searchcount = 0;
+    searchcompany = document.getElementsByClassName( 'sort_by_company' )[0].selectedOptions[0].label ;
+    searchtype = document.getElementsByClassName( 'sort_by_type' )[0].selectedOptions[0].label ;
+    searchcategory = document.getElementsByClassName( 'sort_by_category' )[0].selectedOptions[0].label ;
+    //console.log( a );
+
+    companies_all = document.getElementsByClassName( 'sort_by_company' )[0].options[0].label ;
+    types_all = document.getElementsByClassName( 'sort_by_type' )[0].options[0].label ;
+    categories_all = document.getElementsByClassName( 'sort_by_category' )[0].options[0].label ;
+
+    document.getElementsByClassName( 'sort_by_type' )[0].options[0].label
+
+    for ( p=0; p < testi3.length; p++)
+    {
+        var n = 0;
+
+        if ( testi3[p].children[1].children[1].children[0].children[4] .innerText.includes(searchcategory) && searchcategory != categories_all ) n = n + 1;
+            else
+            {
+                if ( searchcategory == categories_all ) n = n + 1;
+            }
+        if ( testi3[p].children[1].children[1].children[0].children[0] .innerText == searchcompany && searchcompany != companies_all ) n = n + 1;
+            else
+            {
+                if ( searchcompany == companies_all ) n = n + 1;
+            }
+        if ( testi3[p].children[1].children[1].children[0].children[2].innerText.includes(searchtype) && searchtype != types_all ) n = n + 1;
+            else
+            {
+                if ( searchtype == types_all ) n = n + 1;
+                    //else n = n* 0;
+            }
+
+        if ( n == 3 )
+        {
+            testi3[ p ].style.display = "" ;
+            searchcount++;
+        }
+        else
+            testi3[ p ].style.display = "none" ;
+
+    }
+
+}
+async function filteringtooold ( e , a )
+{
+    var yu = 0;
+    testi3.forEach( card =>
+        {
+            card.style.display = "flex";
+            //console.log( yu );
+            yu++;
+        }
+    );
+    take = document.getElementsByClassName( a )[0].selectedOptions[0] ;
+
+    if ( take.value == "all_companies" || take.value == "pusto") die();
+    if ( take.value == "all_categories" || take.value == "pusto") die();
+    if ( take.value == "all_regions" || take.value == "pusto") die();
+
+    if ( a == 'sort_by_category' )
+    for ( cou = 0 ; cou < testi.length ; cou++ )
+    {
+        if ( testi[cou].innerText.includes( take.value ) == false )
+            testi3[cou].style.display ="none";
+    }
+
+    if ( a == 'sort_by_region' )
+    for ( cod = 0 ; cod < testi.length ; cod++ )
+    {
+        if ( testi4[cod].innerText.includes( take.value ) == false && testi4[cod].innerText.includes( '00' ) == false )
+            testi3[cod].style.display ="none";
+    }
+    if ( a == 'sort_by_action' )
+    testi3.forEach( search_card =>
+        {
+            //console.log ( search_card );
+            if ( search_card.attributes.value.value.includes( take.value ) == false )
+            {
+                //console.log( ' daaaa   ' + take.innerHTML + ' eto iskali : ' + search_card.innerHTML );
+                search_card.style.display = "none";
+            }
+        }
+    );
+    if ( a == 'sort_by_company' )
+    {
+        for ( cou = 0 ; cou < testi.length ; cou++ )
+        {
+            if ( testi2[cou].innerText.includes( take.value ) == false )
+            testi3[cou].style.display ="none";
+        }
+    }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=661b8a7bb8238c00198b5b77&product=sticky-share-buttons' async='async'></script>
+
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M37HPPBT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header class="header">
+  <a  href="/" class="logo">
+  			<div class="logo-wrap">
+				<!--
+				<a href="/" class="hover-target"><span>your</span>logo</a>
+				-->
+				<div class="logo_jump">
+					<p>
+						<img src="/logo.svg" style="width:5em"/>
+					</p>
+					<div id="logotext">
+					<p>PAY WITH</p><p class="bl_text">CODE</p>
+					</div>
+				</div>
+			</div>
+  </a>
+  <input class="menu-btn" type="checkbox" id="menu-btn" />
+  <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+  <ul class="menu">
+    <li><a href="/brand-list.php">Brands</a></li>
+    <li><a href="/startstoday.php">Coupons starting today</a></li>
+    <li><a href="/endstoday.php">Last day of Sales</a></li>
+    <li><a href="/tomorrow.php">Tomorrow sales</a></li>
+    <li><a href="/product/product_list.php">Discounted products</a></li>
+  </ul>
+</header>
+    <!--
+    <div class='cursor' id="cursor"></div>
+    <div class='cursor2' id="cursor2"></div>
+    <div class='cursor3' id="cursor3"></div>
+    -->
+<!--
+<canvas id="canvas2"></canvas>
+<canvas id="canvas"></canvas>
+-->
+<canvas id="canvas2"></canvas>
+<div id="google_translate_element"></div>
+<div id="categorieslist">
+    <div class="wrapper">
+      <div class="icon"><i id="left" class="fa-solid fa-angle-left"></i></div>
+      <ul class="tabs-box">
+	<li class="tab tab_spring_delights" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/spring_delights.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Spring Delights</span>
+			<span data-test-id="Text" class="description_text_full">Fresh and Colorful Spring-Inspired Treasures</span>
+		</div>
+	</li>
+	<li class="tab tab_fashion" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/fashion.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Fashion</span>
+			<span data-test-id="Text" class="description_text_full">Clothing, accessories</span>
+		</div>
+	</li>
+	<li class="tab tab_beauty" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/beauty.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Beauty</span>
+			<span data-test-id="Text" class="description_text_full">Cosmetics, perfume, healthcare</span>
+		</div>
+	</li>
+	<li class="tab tab_marketplace" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/marketplace.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Marketplace</span>
+			<span data-test-id="Text" class="description_text_full">Fashion, beauty, appliances</span>
+		</div>
+	</li>
+	<li class="tab tab_electronics" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/electronics.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Electronics</span>
+			<span data-test-id="Text" class="description_text_full">Electronic devices, software, mobile phones</span>
+		</div>
+	</li>
+	<li class="tab tab_home" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/home.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Home</span>
+			<span data-test-id="Text" class="description_text_full">Furniture, DIY, gifts</span>
+		</div>
+	</li>
+	<li class="tab tab_family" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/family.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Family</span>
+			<span data-test-id="Text" class="description_text_full">Toys, kids items, pet items</span>
+		</div>
+	</li>
+	<li class="tab tab_food" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/food.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Food</span>
+			<span data-test-id="Text" class="description_text_full">Groceries, drinks, delivery services</span>
+		</div>
+	</li>
+	<li class="tab tab_travel" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/travel.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Travel</span>
+			<span data-test-id="Text" class="description_text_full">Flights, tours, accommodations</span>
+		</div>
+	</li>
+	<li class="tab tab_entertainment" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/entertainment.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">Entertainment</span>
+			<span data-test-id="Text" class="description_text_full">Education, games, music, tickets</span>
+		</div>
+	</li>
+	<li class="tab tab_all" data="444"  onclick="touchcategory(this.className)" style="background-image: url('/img/categories/all.webp');">
+		<div class="content_ZtS">
+			<span data-test-id="Text" class="description_text">All</span>
+			<span data-test-id="Text" class="description_text_full">All categories in the selected region</span>
+		</div>
+	</li>
+      </ul>
+      <div class="icon"><i id="right" class="fa-solid fa-angle-right"></i></div>
+    </div>
+</div>
+<script type='text/javascript' src='/js/category_slider.js'></script>
+
+<title>Coupons, vouchers and deals in Switzerland - paywithcode.com</title><div id="main">
+      <h1 class="btext">Discounts & coupons in <span id="yourcountry">Switzerland</span></h1><div><span id="selectcountry" onclick="showcountrieslist()">Not your country? Click here to change</span><select id="changecountry" onchange="changecountry()" style="display:none">
+<option value="AF">Afghanistan</option>
+<option value="AL">Albania</option>
+<option value="DZ">Algeria</option>
+<option value="AS">American Samoa</option>
+<option value="AD">Andorra</option>
+<option value="AO">Angola</option>
+<option value="AI">Anguilla</option>
+<option value="AQ">Antarctica</option>
+<option value="AG">Antigua and Barbuda</option>
+<option value="AR">Argentina</option>
+<option value="AM">Armenia</option>
+<option value="AW">Aruba</option>
+<option value="AU">Australia</option>
+<option value="AT">Austria</option>
+<option value="AZ">Azerbaijan</option>
+<option value="BS">Bahamas (the)</option>
+<option value="BH">Bahrain</option>
+<option value="BD">Bangladesh</option>
+<option value="BB">Barbados</option>
+<option value="BY">Belarus</option>
+<option value="BE">Belgium</option>
+<option value="BZ">Belize</option>
+<option value="BJ">Benin</option>
+<option value="BM">Bermuda</option>
+<option value="BT">Bhutan</option>
+<option value="BO">Bolivia (Plurinational State of)</option>
+<option value="BQ">Bonaire, Sint Eustatius and Saba</option>
+<option value="BA">Bosnia and Herzegovina</option>
+<option value="BW">Botswana</option>
+<option value="BV">Bouvet Island</option>
+<option value="BR">Brazil</option>
+<option value="IO">British Indian Ocean Territory (the)</option>
+<option value="BN">Brunei Darussalam</option>
+<option value="BG">Bulgaria</option>
+<option value="BF">Burkina Faso</option>
+<option value="BI">Burundi</option>
+<option value="CV">Cabo Verde</option>
+<option value="KH">Cambodia</option>
+<option value="CM">Cameroon</option>
+<option value="CA">Canada</option>
+<option value="KY">Cayman Islands (the)</option>
+<option value="CF">Central African Republic (the)</option>
+<option value="TD">Chad</option>
+<option value="CL">Chile</option>
+<option value="CN">China</option>
+<option value="CX">Christmas Island</option>
+<option value="CC">Cocos (Keeling) Islands (the)</option>
+<option value="CO">Colombia</option>
+<option value="KM">Comoros (the)</option>
+<option value="CD">Congo (the Democratic Republic of the)</option>
+<option value="CG">Congo (the)</option>
+<option value="CK">Cook Islands (the)</option>
+<option value="CR">Costa Rica</option>
+<option value="HR">Croatia</option>
+<option value="CU">Cuba</option>
+<option value="CW">Curaçao</option>
+<option value="CY">Cyprus</option>
+<option value="CZ">Czechia</option>
+<option value="CI">Côte d'Ivoire</option>
+<option value="DK">Denmark</option>
+<option value="DJ">Djibouti</option>
+<option value="DM">Dominica</option>
+<option value="DO">Dominican Republic (the)</option>
+<option value="EC">Ecuador</option>
+<option value="EG">Egypt</option>
+<option value="SV">El Salvador</option>
+<option value="GQ">Equatorial Guinea</option>
+<option value="ER">Eritrea</option>
+<option value="EE">Estonia</option>
+<option value="SZ">Eswatini</option>
+<option value="ET">Ethiopia</option>
+<option value="FK">Falkland Islands (the) [Malvinas]</option>
+<option value="FO">Faroe Islands (the)</option>
+<option value="FJ">Fiji</option>
+<option value="FI">Finland</option>
+<option value="FR">France</option>
+<option value="GF">French Guiana</option>
+<option value="PF">French Polynesia</option>
+<option value="TF">French Southern Territories (the)</option>
+<option value="GA">Gabon</option>
+<option value="GM">Gambia (the)</option>
+<option value="GE">Georgia</option>
+<option value="DE">Germany</option>
+<option value="GH">Ghana</option>
+<option value="GI">Gibraltar</option>
+<option value="GR">Greece</option>
+<option value="GL">Greenland</option>
+<option value="GD">Grenada</option>
+<option value="GP">Guadeloupe</option>
+<option value="GU">Guam</option>
+<option value="GT">Guatemala</option>
+<option value="GG">Guernsey</option>
+<option value="GN">Guinea</option>
+<option value="GW">Guinea-Bissau</option>
+<option value="GY">Guyana</option>
+<option value="HT">Haiti</option>
+<option value="HM">Heard Island and McDonald Islands</option>
+<option value="VA">Holy See (the)</option>
+<option value="HN">Honduras</option>
+<option value="HK">Hong Kong</option>
+<option value="HU">Hungary</option>
+<option value="IS">Iceland</option>
+<option value="IN">India</option>
+<option value="ID">Indonesia</option>
+<option value="IR">Iran (Islamic Republic of)</option>
+<option value="IQ">Iraq</option>
+<option value="IE">Ireland</option>
+<option value="IM">Isle of Man</option>
+<option value="IL">Israel</option>
+<option value="IT">Italy</option>
+<option value="JM">Jamaica</option>
+<option value="JP">Japan</option>
+<option value="JE">Jersey</option>
+<option value="JO">Jordan</option>
+<option value="KZ">Kazakhstan</option>
+<option value="KE">Kenya</option>
+<option value="KI">Kiribati</option>
+<option value="KP">Korea (the Democratic People's Republic of)</option>
+<option value="KR">Korea (the Republic of)</option>
+<option value="KW">Kuwait</option>
+<option value="KG">Kyrgyzstan</option>
+<option value="LA">Lao People's Democratic Republic (the)</option>
+<option value="LV">Latvia</option>
+<option value="LB">Lebanon</option>
+<option value="LS">Lesotho</option>
+<option value="LR">Liberia</option>
+<option value="LY">Libya</option>
+<option value="LI">Liechtenstein</option>
+<option value="LT">Lithuania</option>
+<option value="LU">Luxembourg</option>
+<option value="MO">Macao</option>
+<option value="MG">Madagascar</option>
+<option value="MW">Malawi</option>
+<option value="MY">Malaysia</option>
+<option value="MV">Maldives</option>
+<option value="ML">Mali</option>
+<option value="MT">Malta</option>
+<option value="MH">Marshall Islands (the)</option>
+<option value="MQ">Martinique</option>
+<option value="MR">Mauritania</option>
+<option value="MU">Mauritius</option>
+<option value="YT">Mayotte</option>
+<option value="MX">Mexico</option>
+<option value="FM">Micronesia (Federated States of)</option>
+<option value="MD">Moldova (the Republic of)</option>
+<option value="MC">Monaco</option>
+<option value="MN">Mongolia</option>
+<option value="ME">Montenegro</option>
+<option value="MS">Montserrat</option>
+<option value="MA">Morocco</option>
+<option value="MZ">Mozambique</option>
+<option value="MM">Myanmar</option>
+<option value="NA">Namibia</option>
+<option value="NR">Nauru</option>
+<option value="NP">Nepal</option>
+<option value="NL">Netherlands (the)</option>
+<option value="NC">New Caledonia</option>
+<option value="NZ">New Zealand</option>
+<option value="NI">Nicaragua</option>
+<option value="NE">Niger (the)</option>
+<option value="NG">Nigeria</option>
+<option value="NU">Niue</option>
+<option value="NF">Norfolk Island</option>
+<option value="MP">Northern Mariana Islands (the)</option>
+<option value="NO">Norway</option>
+<option value="OM">Oman</option>
+<option value="PK">Pakistan</option>
+<option value="PW">Palau</option>
+<option value="PS">Palestine, State of</option>
+<option value="PA">Panama</option>
+<option value="PG">Papua New Guinea</option>
+<option value="PY">Paraguay</option>
+<option value="PE">Peru</option>
+<option value="PH">Philippines (the)</option>
+<option value="PN">Pitcairn</option>
+<option value="PL">Poland</option>
+<option value="PT">Portugal</option>
+<option value="PR">Puerto Rico</option>
+<option value="QA">Qatar</option>
+<option value="MK">Republic of North Macedonia</option>
+<option value="RO">Romania</option>
+<option value="RU">Russian Federation (the)</option>
+<option value="RW">Rwanda</option>
+<option value="RE">Réunion</option>
+<option value="BL">Saint Barthélemy</option>
+<option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
+<option value="KN">Saint Kitts and Nevis</option>
+<option value="LC">Saint Lucia</option>
+<option value="MF">Saint Martin (French part)</option>
+<option value="PM">Saint Pierre and Miquelon</option>
+<option value="VC">Saint Vincent and the Grenadines</option>
+<option value="WS">Samoa</option>
+<option value="SM">San Marino</option>
+<option value="ST">Sao Tome and Principe</option>
+<option value="SA">Saudi Arabia</option>
+<option value="SN">Senegal</option>
+<option value="RS">Serbia</option>
+<option value="SC">Seychelles</option>
+<option value="SL">Sierra Leone</option>
+<option value="SG">Singapore</option>
+<option value="SX">Sint Maarten (Dutch part)</option>
+<option value="SK">Slovakia</option>
+<option value="SI">Slovenia</option>
+<option value="SB">Solomon Islands</option>
+<option value="SO">Somalia</option>
+<option value="ZA">South Africa</option>
+<option value="GS">South Georgia and the South Sandwich Islands</option>
+<option value="SS">South Sudan</option>
+<option value="ES">Spain</option>
+<option value="LK">Sri Lanka</option>
+<option value="SD">Sudan (the)</option>
+<option value="SR">Suriname</option>
+<option value="SJ">Svalbard and Jan Mayen</option>
+<option value="SE">Sweden</option>
+<option value="CH">Switzerland</option>
+<option value="SY">Syrian Arab Republic</option>
+<option value="TW">Taiwan (Province of China)</option>
+<option value="TJ">Tajikistan</option>
+<option value="TZ">Tanzania, United Republic of</option>
+<option value="TH">Thailand</option>
+<option value="TL">Timor-Leste</option>
+<option value="TG">Togo</option>
+<option value="TK">Tokelau</option>
+<option value="TO">Tonga</option>
+<option value="TT">Trinidad and Tobago</option>
+<option value="TN">Tunisia</option>
+<option value="TR">Turkey</option>
+<option value="TM">Turkmenistan</option>
+<option value="TC">Turks and Caicos Islands (the)</option>
+<option value="TV">Tuvalu</option>
+<option value="UG">Uganda</option>
+<option value="UA">Ukraine</option>
+<option value="AE">United Arab Emirates (the)</option>
+<option value="GB">United Kingdom of Great Britain and Northern Ireland (the)</option>
+<option value="UM">United States Minor Outlying Islands (the)</option>
+<option value="US">United States of America (the)</option>
+<option value="UY">Uruguay</option>
+<option value="UZ">Uzbekistan</option>
+<option value="VU">Vanuatu</option>
+<option value="VE">Venezuela (Bolivarian Republic of)</option>
+<option value="VN">Viet Nam</option>
+<option value="VG">Virgin Islands (British)</option>
+<option value="VI">Virgin Islands (U.S.)</option>
+<option value="WF">Wallis and Futuna</option>
+<option value="EH">Western Sahara</option>
+<option value="YE">Yemen</option>
+<option value="ZM">Zambia</option>
+<option value="ZW">Zimbabwe</option>
+<option value="AX">Åland Islands</option>
+</select></div><h2 class="btext">Big deals at 1500+ shops and marketplaces. Information about active sales and promo codes</h2><h3 class="btext">Save up to 70% with this short codes and sales </h3><div style="display:none"><br>Your country - <a id="mycountry_selected" >Switzerland</a> ( <a id="mycountry_selected_id" >CH</a> ) </div>
+   <div id="popp">
+    <div class="swiper mySwiper" pagination="true" pagination-clickable="true" navigation="true" space-between="30" centered-slides="true" autoplay-delay="2500" autoplay-disable-on-interaction="false">
+        <div class="swiper-wrapper"><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a5631"><img lazyload="true" src="/logos/shop_logo_a5631.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a6115"><img lazyload="true" src="/logos/shop_logo_a6115.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a13623"><img lazyload="true" src="/logos/shop_logo_a13623.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a14622"><img lazyload="true" src="/logos/shop_logo_a14622.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a15467"><img lazyload="true" src="/logos/shop_logo_a15467.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a17167"><img lazyload="true" src="/logos/shop_logo_a17167.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a18239"><img lazyload="true" src="/logos/shop_logo_a18239.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a19861"><img lazyload="true" src="/logos/shop_logo_a19861.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a20881"><img lazyload="true" src="/logos/shop_logo_a20881.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a21122"><img lazyload="true" src="/logos/shop_logo_a21122.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a21934"><img lazyload="true" src="/logos/shop_logo_a21934.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a23197"><img lazyload="true" src="/logos/shop_logo_a23197.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a24295"><img lazyload="true" src="/logos/shop_logo_a24295.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a24357"><img lazyload="true" src="/logos/shop_logo_a24357.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a24611"><img lazyload="true" src="/logos/shop_logo_a24611.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a24667"><img lazyload="true" src="/logos/shop_logo_a24667.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a24669"><img lazyload="true" src="/logos/shop_logo_a24669.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a25369"><img lazyload="true" src="/logos/shop_logo_a25369.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a25572"><img lazyload="true" src="/logos/shop_logo_a25572.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a26025"><img lazyload="true" src="/logos/shop_logo_a26025.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a26124"><img lazyload="true" src="/logos/shop_logo_a26124.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a26821"><img lazyload="true" src="/logos/shop_logo_a26821.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a26846"><img lazyload="true" src="/logos/shop_logo_a26846.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a30341"><img lazyload="true" src="/logos/shop_logo_a30341.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a38470"><img lazyload="true" src="/logos/shop_logo_a38470.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a40489"><img lazyload="true" src="/logos/shop_logo_a40489.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a40836"><img lazyload="true" src="/logos/shop_logo_a40836.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a42487"><img lazyload="true" src="/logos/shop_logo_a42487.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a42812"><img lazyload="true" src="/logos/shop_logo_a42812.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a43020"><img lazyload="true" src="/logos/shop_logo_a43020.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a43386"><img lazyload="true" src="/logos/shop_logo_a43386.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a44814"><img lazyload="true" src="/logos/shop_logo_a44814.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a50023"><img lazyload="true" src="/logos/shop_logo_a50023.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a50025"><img lazyload="true" src="/logos/shop_logo_a50025.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a77184"><img lazyload="true" src="/logos/shop_logo_a77184.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a96135"><img lazyload="true" src="/logos/shop_logo_a96135.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a101287"><img lazyload="true" src="/logos/shop_logo_a101287.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a102186"><img lazyload="true" src="/logos/shop_logo_a102186.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a104401"><img lazyload="true" src="/logos/shop_logo_a104401.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a104404"><img lazyload="true" src="/logos/shop_logo_a104404.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a104545"><img lazyload="true" src="/logos/shop_logo_a104545.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a104675"><img lazyload="true" src="/logos/shop_logo_a104675.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a104678"><img lazyload="true" src="/logos/shop_logo_a104678.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a105191"><img lazyload="true" src="/logos/shop_logo_a105191.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a105262"><img lazyload="true" src="/logos/shop_logo_a105262.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a108056"><img lazyload="true" src="/logos/shop_logo_a108056.webp"/></a></div><div class="marquee Item swiper-slide"><a target="_blank" href="/link/?shop_a117012"><img lazyload="true" src="/logos/shop_logo_a117012.webp"/></a></div></div></div>
+  <!-- If we need pagination
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <!-- If we need scrollbar
+  <div class="swiper-scrollbar"></div>
+  -->
+  </div><div id="main_bottom"><hr>
+    <div class="search_by_category">Offers and coupons from selected country by categories:<br><label for="categories">Select category to see coupons: </label><span style="color: red !important; display: inline; float: none;">*</span>
+    <select id="categories" name="categories" method="post" class="form-country" onchange="show_coupons(event , this.id)"><option value="11.11" class="91">11.11</option><option value="Accessories & Bags" class="3">Accessories & Bags</option><option value="Adult" class="18">Adult</option><option value="Auto & Moto Goods" class="20">Auto & Moto Goods</option><option value="Belarus Fest" class="156">Belarus Fest</option><option value="Books" class="14">Books</option><option value="Cars" class="92">Cars</option><option value="Clothing" class="5">Clothing</option><option value="Computers & Electronics" class="8">Computers & Electronics</option><option value="DIY, Garden" class="23">DIY, Garden</option><option value="Finance & Insurance" class="15">Finance & Insurance</option><option value="Food" class="11">Food</option><option value="Games" class="19">Games</option><option value="Gifts & Flowers" class="9">Gifts & Flowers</option><option value="Hobby & Stationery" class="72">Hobby & Stationery</option><option value="Homeware" class="7">Homeware</option><option value="Jobs and freelance" class="93">Jobs and freelance</option><option value="Marketplaces (including Chinese Stores)" class="34">Marketplaces (including Chinese Stores)</option><option value="Online Education" class="22">Online Education</option><option value="Outdoor Clothing & Equipment" class="24">Outdoor Clothing & Equipment</option><option value="Personal Care & Pharmacy" class="2">Personal Care & Pharmacy</option><option value="Pet products" class="17">Pet products</option><option value="Sale 11.11" class="133">Sale 11.11</option><option value="Services" class="21">Services</option><option value="Shoes" class="4">Shoes</option><option value="Sports & Recreation" class="6">Sports & Recreation</option><option value="Summer fest" class="155">Summer fest</option><option value="Tours & Travels" class="12">Tours & Travels</option><option value="Toys, Kids & Babies" class="1">Toys, Kids & Babies</option><option value="Transportation services" class="94">Transportation services</option><option value="Watches & Jewelry" class="10">Watches & Jewelry</option></select></div><!-- <button id="category_confirm" class="btn_sub" class="btn_sub" onclick="show_coupons(event , this.id)" >Show coupons</button> --></div><hr><div id="search_by_word">Search coupons with any words:
+<input id="searchwordq" type="search_c" value="" name="searchword" onchange="word_coupons(event , this.id)">
+<!-- <button id="category_confirm" class="btn_sub" onclick="word_coupons(event , this.id)" >Search</button> --><div class="lastsearchdiv">Popular coupons searches:<br><a href="https://paywithcode.com/?search=cooking" class="lastcouponsearch">cooking</a><a href="https://paywithcode.com/?search=water" class="lastcouponsearch">water</a><a href="https://paywithcode.com/?search=germany" class="lastcouponsearch">germany</a><a href="https://paywithcode.com/?search=3d printer" class="lastcouponsearch">3d printer</a><a href="https://paywithcode.com/?search=beauty" class="lastcouponsearch">beauty</a><a href="https://paywithcode.com/?search=platinum" class="lastcouponsearch">platinum</a><a href="https://paywithcode.com/?search=printer" class="lastcouponsearch">printer</a><a href="https://paywithcode.com/?search=50%" class="lastcouponsearch">50%</a><a href="https://paywithcode.com/?search=bike" class="lastcouponsearch">bike</a></div><br></div></div><div id="main2"><div id="couponlist"></div></div></div>
+<script type="text/javascript" src="https://apycdn.com/rotator/11840/subaccount"></script>
+<hr>
+  <div class="container_social">
+  <button class="btnl">
+  	<a href="https://about.me/savvycouponsanddeals" target="_blank">
+    <i class="fa fa-user" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+  	<a href="https://buy-with-code.blogspot.com" target="_blank">
+    <i class="fa-brands fa-blogger-b" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+  	<a href="https://substack.com/@paywithcode" target="_blank">
+    <i class="fa-brands fa-themeco" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+  	<a href="https://www.linkedin.com/company/99863935/admin/feed/posts/" target="_blank">
+    <i class="fa-brands fa-linkedin-in" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+  	<a href="https://giphy.com/channel/pay_with_code" target="_blank">
+    <i class="fas fa-thumbtack" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+	<a href="https://www.instagram.com/pay.with.code/" target="_blank">
+    <i class="fa fa-instagram" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+	<a href="https://twitter.com/promocode_world" target="_blank">
+    <i class="fa fa-twitter" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+	<a href="https://www.pinterest.ca/promocode_worldwide/" target="_blank">
+    <i class="fa fa-pinterest" style="font-size:35px;"></i>
+ 	</a>
+  </button>
+  <button class="btnl">
+	<a href="https://imgur.com/user/paywithcode/posts" target="_blank">
+    <i class="fa-regular fa-image" style="font-size:35px;"></i>
+ 	</a>
+  </button>
+  <!--
+  <button class="btnl">
+	<a href="https://www.reddit.com/r/CouponFaucet/" target="_blank">
+	<i class="fa-brands fa-reddit" style="font-size:35px;"></i>
+	</a>
+  </button>
+  -->
+    <button class="btnl">
+	<a href="https://medium.com/@couponhackers" target="_blank">
+	<i class="fa-brands fa-medium" style="font-size:35px;"></i>
+	</a>
+  </button>
+  <button class="btnl">
+	<a href="https://www.tiktok.com/@pay.with.code" target="_blank">
+	<i class="fa-brands fa-tiktok" style="font-size:35px;"></i>
+  	</a>
+</button>
+  </div>
+  <div class="privacy" style="text-align: center;margin:auto"><a href="pp.html">Privacy Policy</a></div>
+</div>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4Q4PZJ5L2K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4Q4PZJ5L2K');
+</script>
+<script>
+if ( document.getElementById ('shop_alias') != null )
+{
+  document.querySelector('meta[name="keywords"]').setAttribute("content", document.getElementById ('shop_alias').innerText );
+  document.querySelector('meta[name="description"]').setAttribute("content", document.title
+ + ' - ' + document.getElementById ('shop_alias').innerText );
+
+}
+
+if ( document.getElementById ('code_description') != null)
+{
+  document.querySelector('meta[name="keywords"]').setAttribute("content", document.getElementById ('code_description').innerText.split(' ').concat ( 'Coupons', 'Discounts', 'Deals', 'Savings', 'Coupon Codes', 'Online Shopping', 'Exclusive Offers', 'Bargains', 'Promo Codes', 'Vouchers', 'Money-Saving' ) );
+  document.querySelector('meta[name="description"]').setAttribute("content", document.title + ' - money saving deals for online shopping' );
+
+}
+
+/*
+if ( document.getElementById ('shop_alias') != null )
+{
+  document.querySelector('meta[name="keywords"]').setAttribute("content", document.getElementById ('shop_alias').innerText );
+  document.querySelector('meta[name="description"]').setAttribute("content", document.getElementById ('shop_alias').innerText );
+
+}
+*/
+
+    if ( document.getElementById ('promo_count') != null )
+    {
+      document.querySelector('meta[name="keywords"]').setAttribute("content", document.title );
+      document.querySelector('meta[name="description"]').setAttribute("content", document.title );
+    }
+
+	if ( document.getElementById( "upperfirstletterlist" ) != undefined )
+	{
+        var up = document.createElement("div");
+
+
+		up = document.getElementsByClassName( "showid" )[0];
+		document.getElementById( "upperfirstletterlist" ).appendChild(up);
+	}
+
+
+		testi = document.querySelectorAll('.voucher_categories');
+        testi2 = document.querySelectorAll('.company_name');
+        testi3 = document.querySelectorAll('.card');
+        testi4 = document.querySelectorAll('.regions');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<!--
+script for mouse drag of company slider
+<script type='text/javascript' src='/js/marqueedrag.js'></script>
+-->
+
+<!--
+<script type='text/javascript' src='/js/navmenu.js'></script>
+-->
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script type="text/javascript">
+// normal function
+ function googleTranslateElementInit()
+ {
+   new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL}, 'google_translate_element');
+ }
+
+
+
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+
+
+//setCookie('googtrans', '/en/' + codestrana , 1);
+
+function eraseCookie(name) {
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+//little hack try
+/*
+function googleTranslateElementInit() {
+
+	codestrana = new URLSearchParams(window.location.search).get('lang') ;
+	if ( codestrana == null )
+	{
+		console.log ( codestrana = null );
+		codestrana = 'en';
+
+	}
+	else
+	codestrana = codestrana.toLowerCase();
+	//console.log ( codestrana );
+
+	eraseCookie('googtrans');
+    setCookie('googtrans', '/en/' + codestrana , 1);
+    new google.translate.TranslateElement({
+       pageLanguage: 'en'
+    }, 'google_translate_element');
+}
+*/
+
+if ( window.location.hash.includes ('googtrans'))
+{
+  console.log ( 'googtrans ' );
+  langu = window.location.hash.replace( '#googtrans'  , '' ).replace ( '(' , '' ).replace( ')' , '' );
+  document.documentElement.lang = langu;
+
+
+}
+
+else
+  document.documentElement.lang = 'en';
+
+</script>
+<script>
+
+
+if (typeof rewritecanonical === 'undefined')
+{
+		document.querySelector("link[rel='canonical']").href = window.location.href;
+		document.querySelector('meta[name="description"]').setAttribute("content", document.title);
+
+		console.log ( 'can as is' );
+}
+
+</script>
+</body>
+</html>
+
+</div>
+</div>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4Q4PZJ5L2K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4Q4PZJ5L2K');
+</script>
+
+<script>
+
+if ( document.getElementById('searchwordq').value != undefined && document.getElementById('searchwordq').value != '' )
+{
+    document.title = 'Best deals and coupons for ' + document.getElementById('searchwordq').value + ' - paywithcode.com';
+    word_coupons();
+}
+countrykode = new URLSearchParams(window.location.search).get('country') ;
+cattype = new URLSearchParams(window.location.search).get('type') ;
+
+var arrcat = [];
+
+arrcat ["Toys,_Kids_,_Babies"] = "1" ;
+arrcat ["Personal_Care_,_Pharmacy"] = "2" ;
+arrcat ["Accessories_,_Bags"] = "3" ;
+arrcat ["Shoes"] = "4" ;
+arrcat ["Clothing"] = "5" ;
+arrcat ["Sports_,_Recreation"] = "6" ;
+arrcat ["Homeware"] = "7" ;
+arrcat ["Computers_,_Electronics"] = "8" ;
+arrcat ["Gifts_,_Flowers"] = "9" ;
+arrcat ["Watches_,_Jewelry"] = "10" ;
+arrcat ["Food"] = "11" ;
+arrcat ["Tours_,_Travels"] = "12" ;
+arrcat ["Books"] = "14" ;
+arrcat ["Finance_,_Insurance"] = "15" ;
+arrcat ["Pet_products"] = "17" ;
+arrcat ["Adult"] = "18" ;
+arrcat ["Games"] = "19" ;
+arrcat ["Auto_,_Moto_Goods"] = "20" ;
+arrcat ["Services"] = "21" ;
+arrcat ["Online_Education"] = "22" ;
+arrcat ["DIY,_Garden"] = "23" ;
+arrcat ["Outdoor_Clothing_,_Equipment"] = "24" ;
+arrcat ["Marketplaces_(including_Chinese_Stores)"] = "34" ;
+arrcat ["Hobby_,_Stationery"] = "72" ;
+arrcat ["11.11"] = "91" ;
+arrcat ["Cars"] = "92" ;
+arrcat ["Jobs_and_freelance"] = "93" ;
+arrcat ["Transportation_services"] = "94" ;
+arrcat ["Cyber_Monday_2023"] = "102" ;
+arrcat ["Heroes_Marathon_2023"] = "108" ;
+arrcat ["Nauryz_2023"] = "109" ;
+arrcat ["Hot_Trip_Days_2023"] = "112" ;
+arrcat ["Children's_Week_UA"] = "113" ;
+arrcat ["Summer_Fest_2023"] = "114" ;
+arrcat ["Travel_Fest_2023"] = "115" ;
+arrcat ["Back_To_School_2023"] = "116" ;
+arrcat ["BBQ_Fest_2023"] = "117" ;
+
+
+mucat = arrcat[cattype];
+console.log( mucat );
+
+if ( mucat != null )
+{
+    window.onload = function ()
+    {
+        show_coupons('' , mucat);
+        document.title = 'Pay with code - vouchers, coupons and sales in category ' + cattype.replace('_,_' , '_&_').replace('_',' ') + ' - paywithcode.com';
+    }
+
+}
+
+lang = new URLSearchParams(window.location.search).get('lang') ;
+if ( countrykode != null && lang != null )
+document.querySelector("link[rel='canonical']").href = window.location.href;
+
+if ( countrykode != null )
+{
+
+        const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
+        countryimya = regionNamesInEnglish.of(countrykode.toUpperCase());
+        document.getElementById('mycountry_selected').innerHTML = countryimya;
+        document.getElementById('mycountry_selected_id').innerHTML = countrykode;
+        document.getElementById('yourcountry').innerHTML = countryimya;
+        // // title
+        console.log(regionNamesInEnglish.of(countrykode.toUpperCase()));
+
+        document.title = 'Pay with code - vouchers, coupons and sales in ' + countryimya + ' - paywithcode.com';
+
+}
+</script>
+<script src="/js/swiper.js"></script>
+
+</body>
+</html>
