@@ -100,18 +100,12 @@ function search_coupons()
 
             if ( obj[i].description.toLowerCase().includes(query) || obj[i].campaign.name.toLowerCase().includes(query) ||  obj[i].promocode.toLowerCase().includes(query) || obj[i].short_name.toLowerCase().includes(query)  )
             {
-                //console.log (obj[i]);
-                //console.log (obj[i].description);
-                //console.log ( obj[i].regions )
-                //console.log ( obj[i].frameset_link )
-                //console.log ( obj[i].url );
-                //console.log ( obj[i].code );
-                //showed_merchants.push ( obj[i].merchantname );
-                //showed_categories.push ( obj[i].couponcategory );
-                //merchantid = obj[i].tagging_ads;
-                //mainboxhtml = mainboxhtml + '<div class="card"><img src="' + obj[i].logo + '" alt="" /><h1><a href="' + obj[i].url + '">' + obj[i].merchantname + '</a></h1><p>' + obj[i].description + '</p><p class="tag_ad">' + obj[i].tagging_ads + '</p><p class="code">Промокод: ' + pr_code + '</p></div>';
-                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + stripHtml(obj[i].short_name) + '</p><p class="code"><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '</p></div>';
+                date = new Date ( obj[i].date_end );
+                options = { year: 'numeric', month: 'long', day: 'numeric' };
+                formattedDate = date.toLocaleDateString('en-US', options);
 
+                //mainboxhtml = mainboxhtml + '<div class="card"><img src="' + obj[i].logo + '" alt="" /><h1><a href="' + obj[i].url + '">' + obj[i].merchantname + '</a></h1><p>' + obj[i].description + '</p><p class="tag_ad">' + obj[i].tagging_ads + '</p><p class="code">Промокод: ' + pr_code + '</p></div>';
+                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + stripHtml(obj[i].short_name) + '</p><p class="code"><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '</p><p>Ends: ' + formattedDate + '</p></div>';
             }
         }
         else
@@ -121,18 +115,12 @@ function search_coupons()
 
             if ( obj[i].description.toLowerCase().includes(query) || obj[i].campaign.name.toLowerCase().includes(query) ||  obj[i].promocode.toLowerCase().includes(query) ||obj[i].short_name.toLowerCase().includes(query)  )
             {
-                //console.log (obj[i]);
-                //console.log (obj[i].description);
-                //console.log ( obj[i].regions )
-                //console.log ( obj[i].frameset_link )
-                //console.log ( obj[i].url );
-                //merchantid = obj[i].tagging_ads;
-                //console.log ( obj[i].code );
-                //showed_merchants.push ( obj[i].merchantname );
-                //showed_categories.push ( obj[i].couponcategory );
+                date = new Date ( obj[i].date_end );
+                options = { year: 'numeric', month: 'long', day: 'numeric' };
+                formattedDate = date.toLocaleDateString('en-US', options);
 
                 //mainboxhtml = mainboxhtml + '<div class="card"><img src="' + obj[i].logo + '" alt="" /><h1><a href="' + obj[i].url + '">' + obj[i].merchantname + '</a></h1><p>' + obj[i].description + '</p><p class="tag_ad">' + obj[i].tagging_ads + '</p><p class="code">Промокод: ' + pr_code + '</p></div>';
-                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + stripHtml(obj[i].short_name) + '</p><p class="code"><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '</p></div>';
+                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + stripHtml(obj[i].short_name) + '</p><p class="code"><a href="https://paywithcode.com/gotoshop.php?sale=' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '</p><p>Ends: ' + formattedDate + '</p></div>';
 
             }
 
