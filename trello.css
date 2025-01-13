@@ -10,16 +10,21 @@
 }
 
 img{
-    border-radius: 50%;
-    width: 70px;
-    margin: 10px;
+  /*    border-radius: 50%;*/
+  /*    width: 70px;*/
+  margin: 10px;
+  width: 90%;
+  margin: 10px;
+  /*    height: 4rem;*/
+  object-fit: contain;
 }
 
 h1{
-    font-weight: lighter;
-    margin-left: 100px;
+  font-weight: lighter;
+  /*    margin-left: 100px;*/
   margin-top: 1rem;
-
+  text-align:center;
+  font-size: inherit;
 }
 
 p{
