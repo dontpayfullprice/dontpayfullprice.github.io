@@ -1,4 +1,4 @@
-
+<meta charset="utf-8">
 
   <!-- Icon -->
     <link
@@ -7,7 +7,7 @@
     />
     <link
       rel="stylesheet"
-      href="style.css"
+      href="style2.css"
     />
     <link
       rel="stylesheet"
@@ -15,8 +15,23 @@
     />
 
 <!-- Code -->
-<div class="input-box">
-      <input type="text" placeholder="Search coupons..." onchange="search_coupons()"/>
+<div class="input-box"  onchange="search_coupons()">
+      <input type="text" placeholder="Search coupons..."/>
+      <div class="check_promo">
+      <input type="checkbox" id="promok" name="promok" value="promok">Show only with promo codes</input>
+
+      <div class="additional_categories" style="display:none">
+          <select id="categories" name="categories">
+                <option value="all">All</option>
+            </select>
+      </div>
+      <div class="additional_merchants" style="display:none">
+          <select id="merchants" name="merchants">
+                <option value="all">All</option>
+            </select>
+      </div>
+</div>
+
       <span class="search">
         <i class="uil uil-search search-icon"></i>
       </span>
@@ -26,9 +41,11 @@
 </div>
 <script src="script.js"></script>
 <script src="require.js"></script>
-<script src="search.js"></script>
+<script src="search2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
+
+
 async function getcoupons ()
 {
     jQuery.get('data/coupon_string', function(data) {
