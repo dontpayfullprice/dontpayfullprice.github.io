@@ -4,6 +4,13 @@ async function getcoupons ()
         xmlstr = data;
     });
 }
+function stripHtml(html)
+{
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+}
+
 
 function onlyUnique(value, index, array) {
     return array.indexOf(value) === index;
@@ -103,7 +110,7 @@ function search_coupons()
                 //showed_categories.push ( obj[i].couponcategory );
                 //merchantid = obj[i].tagging_ads;
                 //mainboxhtml = mainboxhtml + '<div class="card"><img src="' + obj[i].logo + '" alt="" /><h1><a href="' + obj[i].url + '">' + obj[i].merchantname + '</a></h1><p>' + obj[i].description + '</p><p class="tag_ad">' + obj[i].tagging_ads + '</p><p class="code">Промокод: ' + pr_code + '</p></div>';
-                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + obj[i].short_name + '</p><p class="code"><a href="' + '<a href="' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '"></p></div>';
+                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + stripHtml(obj[i].short_name) + '</p><p class="code"><a href="' + '<a href="' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '"></p></div>';
 
             }
         }
@@ -125,7 +132,7 @@ function search_coupons()
                 //showed_categories.push ( obj[i].couponcategory );
 
                 //mainboxhtml = mainboxhtml + '<div class="card"><img src="' + obj[i].logo + '" alt="" /><h1><a href="' + obj[i].url + '">' + obj[i].merchantname + '</a></h1><p>' + obj[i].description + '</p><p class="tag_ad">' + obj[i].tagging_ads + '</p><p class="code">Промокод: ' + pr_code + '</p></div>';
-                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + obj[i].short_name + '</p><p class="code"><a href="' + '<a href="' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '"></p></div>';
+                mainboxhtml = mainboxhtml + '<div class="card"><img src="/logos/' + obj[i].campaign.id + '.webp" alt="" /><h1><a href="' + obj[i].goto_link + '">' + obj[i].campaign.name + '</a></h1><p>' + stripHtml(obj[i].short_name) + '</p><p class="code"><a href="' + '<a href="' + obj[i].goto_link + '">' + pr_code + '</a></p><p class="discount">' + discount + '"></p></div>';
 
             }
 
