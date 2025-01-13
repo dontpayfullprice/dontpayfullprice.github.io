@@ -17,6 +17,7 @@ img{
   margin: 10px;
   /*    height: 4rem;*/
   object-fit: contain;
+  border-radius: 1rem;
 }
 
 h1{
