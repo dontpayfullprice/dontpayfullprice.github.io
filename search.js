@@ -73,6 +73,8 @@ function search_coupons()
         if ( promokod == true && obj[i].promocode.toLowerCase() == 'not required' )
             continue;
 
+
+/*
         if ( chosen_category != "0" && obj[i].categories.includes( chosen_category_value ) != true )
         {
             //console.log (chosen_category_value);
@@ -80,10 +82,39 @@ function search_coupons()
             continue;
         }
 
+*/
+
+            objcategories = [];
+            for ( b = 0 ; b < obj[i].categories.length ; b++ )
+                {
+                    objcategories.push ( obj[i].categories[b].name )
+                }
+
+            objcategories.push  ('All categories');
+
+
+            if ( objcategories.includes( chosen_category_value ) == false )
+            {
+                console.log ( objcategories );
+                continue;
+            }
+
+
+
+
+
+        if ( obj[i].discount != null )
+            discount = 'Discount: ' + obj[i].discount;
+        else
+            discount = ' ';
+
+
         if ( chosen_merchant != "0" && obj[i].campaign.name != chosen_merchant_value )
         {
             continue;
         }
+
+
         if ( promokod == true && obj[i].promocode != '' )
         {
 
@@ -93,10 +124,6 @@ function search_coupons()
             if ( obj[i].short_name == null )
                 obj[i].short_name = '';
 
-            if ( obj[i].discount != null )
-                discount = 'Discount: ' + obj[i].discount;
-            else
-                discount = '';
 
             if ( obj[i].description.toLowerCase().includes(query) || obj[i].campaign.name.toLowerCase().includes(query) ||  obj[i].promocode.toLowerCase().includes(query) || obj[i].short_name.toLowerCase().includes(query)  )
             {
