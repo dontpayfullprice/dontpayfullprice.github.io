@@ -1,9 +1,9 @@
-async function getcoupons ()
-{
-    jQuery.get('data/admitad_coupons_string', function(data) {
-        xmlstr = data;
-    });
-}
+// async function getcoupons ()
+// {
+//     await jQuery.get('data/admitad_coupons_string', function(data) {
+//         xmlstr = data;
+//     });
+// }
 function stripHtml(html)
 {
     let tmp = document.createElement("DIV");
@@ -18,7 +18,7 @@ function onlyUnique(value, index, array) {
 
 //xmlstr =  getcoupons ()
 
-function search_coupons()
+async function search_coupons()
 {
 
     chosen_category = document.querySelector("#categories").selectedIndex ;
@@ -34,7 +34,6 @@ function search_coupons()
 
 
     // search
-    obj = JSON.parse(xmlstr);
 
     query = document.getElementsByClassName('input-box')[0].children[0].value.toLowerCase();
 
@@ -49,6 +48,7 @@ function search_coupons()
 
     // add info searched
     mainboxhtml = '';
+
 
     for ( i = 0; i< obj.length; i++ )
     {
@@ -212,6 +212,9 @@ function search_coupons()
     merchantshtml = '<option value="all">All merchants</option>' + merchantshtml ;
 
 
+    if ( mainboxhtml == '')
+        mainboxhtml = 'There are no coupons with this words';
+
     document.getElementById('mainbox').innerHTML = mainboxhtml;
     document.getElementById('categories').innerHTML = categorieshtml;
     document.getElementById('merchants').innerHTML = merchantshtml;
@@ -239,5 +242,14 @@ thisurl = window.location.search;
 params = new URLSearchParams(thisurl);
 search_query = params.get('search');
 document.getElementsByClassName('input-box')[0].children[0].value = search_query;
-search_coupons();
+/*
+g = typeof ( xmlstr );
 
+while ( g == 'undefined' )
+    await delay(2000);
+    // setTimeout(() => {
+    //     console.log ('loading...');
+    //     //g = typeof ( xmlstr );
+    // }, "400");*/
+
+search_coupons();
