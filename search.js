@@ -231,3 +231,13 @@ function search_coupons()
 
 
 }
+
+document.getElementsByClassName('search')[0].click()
+
+
+thisurl = window.location.search;
+params = new URLSearchParams(thisurl);
+search_query = params.get('search');
+document.getElementsByClassName('input-box')[0].children[0].value = search_query;
+search_coupons();
+
