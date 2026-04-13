@@ -115,11 +115,11 @@ body {
 .v2-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
+  gap: .5rem;
   cursor: pointer;
   font-size: .85rem;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--text);
   background: var(--bg);
   border: 1.5px solid var(--border);
   border-radius: 20px;
@@ -129,12 +129,13 @@ body {
   white-space: nowrap;
 }
 
-.v2-toggle-btn input[type=checkbox] { display: none; }
-
-.v2-toggle-btn.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
+.v2-toggle-btn input[type=checkbox] {
+  accent-color: var(--primary);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
 }
 
 .v2-select {
@@ -148,7 +149,7 @@ body {
   background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right .75rem center;
   cursor: pointer;
   outline: none;
-  max-width: 180px;
+  min-width: 160px;
   transition: border-color .2s;
 }
 

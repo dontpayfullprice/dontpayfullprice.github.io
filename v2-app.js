@@ -122,7 +122,7 @@ function buildCard(c) {
 // ─── Filter & render ──────────────────────────────────────────
 function render() {
   const query = elSearch.value.toLowerCase().trim();
-  const promoOnly = elPromoToggle.classList.contains("active");
+  const promoOnly = elPromoToggle.checked;
   const catVal = elCategory.value;
   const merVal = elMerchant.value;
 
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
   elGrid        = document.getElementById("v2-grid");
   elCount       = document.getElementById("v2-count");
   elSearch      = document.getElementById("v2-search");
-  elPromoToggle = document.getElementById("v2-promo-toggle");
+  elPromoToggle = document.getElementById("v2-promo-cb");
   elCategory    = document.getElementById("v2-category");
   elMerchant    = document.getElementById("v2-merchant");
 
@@ -234,10 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
   elSearch.addEventListener("keydown", e => { if (e.key === "Enter") { clearTimeout(debounceTimer); render(); } });
   document.getElementById("v2-search-btn").addEventListener("click", () => { clearTimeout(debounceTimer); render(); });
 
-  elPromoToggle.addEventListener("click", () => {
-    elPromoToggle.classList.toggle("active");
-    render();
-  });
+  elPromoToggle.addEventListener("change", render);
 
   elCategory.addEventListener("change", render);
   elMerchant.addEventListener("change", render);
