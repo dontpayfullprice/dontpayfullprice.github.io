@@ -1,95 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DontPayFullPrice — Best Coupons &amp; Promo Codes</title>
+  <meta name="description" content="Find the best coupons, promo codes and discount deals. Save money every time you shop online." />
 
-  <!-- Icon -->
-    <link
-      rel="stylesheet"
-      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
-    />
-    <link
-      rel="stylesheet"
-      href="style.css"
-    />
-    <link
-      rel="stylesheet"
-      href="trello.css"
-    />
-    <meta name="google-site-verification" content="OX1lHcEcjOf81sYL-qrVX2git7I-T5rci7t2D7rvnI0" />
+  <!-- Preconnect for fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link rel="stylesheet" href="v2-style.css" />
 </head>
-<!-- Code -->
-<div class="input-box"  onchange="search_coupons()">
-      <input type="text" class="input_text_place" placeholder="Search coupons..."/>
-      <div class="check_promo">
-      <input type="checkbox" id="promok" name="promok" value="promok">Show only with promo codes</input>
+<body>
 
-      <div class="additional_categories" style="display:none">
-          <select id="categories" name="categories">
-                <option>All categories</option>
-            </select>
+  <!-- ═══════════ HEADER / HERO ═══════════ -->
+  <header class="v2-header">
+    <div class="v2-search-wrap">
+      <h1>🏷 Don't Pay Full Price</h1>
+      <p>Hundreds of coupons &amp; promo codes updated daily</p>
+
+      <div class="v2-search-row">
+        <input
+          id="v2-search"
+          type="search"
+          autocomplete="off"
+          placeholder="Search by store, brand or keyword…"
+          aria-label="Search coupons"
+        />
+        <button id="v2-search-btn" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          Search
+        </button>
       </div>
-      <div class="additional_merchants" style="display:none">
-          <select id="merchants" name="merchants">
-                <option value="all">All merchants</option>
-            </select>
-      </div>
-</div>
+    </div>
+  </header>
 
-      <span class="search">
-        <i class="uil uil-search search-icon"></i>
-      </span>
-      <i class="uil uil-times close-icon"></i>
-</div>
-<div id="mainbox">
-</div>
-<script src="script.js"></script>
-<script src="require.js"></script>
-<script src="search.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
+  <!-- ═══════════ STICKY FILTER BAR ═══════════ -->
+  <div class="v2-sticky-bar">
+    <div class="v2-filter-inner">
 
+      <!-- Promo-code only toggle -->
+      <label id="v2-promo-toggle" class="v2-toggle-btn" role="button" tabindex="0" aria-pressed="false">
+        <input id="v2-promo-cb" type="checkbox" />
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+        </svg>
+        Promo codes only
+      </label>
 
-async function getcoupons ()
-{
-    jQuery.get('data/coupon_string', function(data) {
-         xmlstr = data
-    });
-}
+      <!-- Category filter -->
+      <select id="v2-category" class="v2-select" aria-label="Filter by category">
+        <option value="all">All categories</option>
+      </select>
 
-//xmlstr =  await getcoupons ();  // command waits until completion
+      <!-- Merchant filter -->
+      <select id="v2-merchant" class="v2-select" aria-label="Filter by merchant">
+        <option value="all">All merchants</option>
+      </select>
 
-async function caller() {
-    xmlstr = await this.getcoupons();  // command waits until completion
-    console.log(xmlstr);            // hello is now available
-}
+      <!-- Result count -->
+      <span id="v2-count" class="v2-result-count">Loading…</span>
+    </div>
+  </div>
 
-caller ();
+  <!-- ═══════════ MAIN GRID ═══════════ -->
+  <main class="v2-main">
+    <div id="v2-grid" class="v2-grid" role="list" aria-live="polite" aria-label="Coupon deals">
+      <!-- cards injected by v2-app.js -->
+    </div>
+  </main>
 
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer style="text-align:center;padding:2rem 1rem;font-size:.8rem;color:#94a3b8;">
+    Deals sourced via Admitad. Prices &amp; availability may vary. &copy; DontPayFullPrice
+  </footer>
 
-
-
-fetch('data/coupon_string')
-  .then(response => response.text()) // Or use .json() if it's JSON data
-  .then(data => {
-    xmlstr = data;
-    //console.log("Data received and decoded:", data);
-      // Place the next part of the code here
-    processData(data);
-  })
-
-function processData(data) {
-    console.log("Processing the data now...");
-  // Your further logic here
-    obj = JSON.parse(xmlstr);
-
-
-
-    thisurl = window.location.search;
-    params = new URLSearchParams(thisurl);
-    search_query = params.get('search');
-    document.getElementsByClassName('input-box')[0].children[0].value = search_query;
-    search_coupons();
-    }
-
-
-
-</script>
+  <script src="v2-app.js"></script>
+</body>
+</html>
